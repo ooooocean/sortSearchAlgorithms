@@ -300,7 +300,6 @@ x = [1,12,9,5,6,10]
 
 def heapify_array(array, n, i):
     for j in range(i, -1, -1):
-        print(f'\ninitiating for step {i}\n')
         # set current value to be the largest
         largest = i
 
@@ -308,20 +307,32 @@ def heapify_array(array, n, i):
         left = (2 * i) + 1
         right = (2 * i) + 2
 
-        print(f'left index of {i} is {left}, right index is {right}. checking against {n-1}')
-        print(f'largest index is {largest} with value {array[largest]}')
         if left < n and array[left] > array[largest]:
             largest = left
-            print(f'new largest index is {largest} with value {array[largest]}')
         if right < n and array[right] > array[largest]:
             largest = right
-            print(f'new largest index is {largest} with value {array[largest]}')
         if largest != i:
-            print(f'swapped values, heapifying again')
             array[i], array[largest] = array[largest], array[i]
             heapify_array(array, n, largest)
         i-=1
 
 print(x)
-y = heapify_array(x, 6, 2)
+heapify_array(x, 6, 2)
+print(x)
+print('\n')
+
+def heap_sort(array, n):
+    print(f'input is {array}')
+    for i in range(n-1):
+        # remove root element and add to end of array
+        array[0], array[n-1-i] = array[n-1-i], array[0]
+        print(f'array elements swapped for i={i}\narray is now {array}')
+
+        # heapify with reduced heap
+        new_idx = (n // 2) - 1
+        heapify_array(array, n-1-i, new_idx)
+        print(f'array heapified to {array}\n')
+    return array
+
+heap_sort(x, 6)
 print(x)
