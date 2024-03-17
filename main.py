@@ -62,3 +62,16 @@ def selection_sort(array):
         array[n], array[minimum] = array[minimum], array[n]
         n += 1
     return array
+
+def insertion_sort(array):
+    # start loop at step = 1
+    for step in range(1, len(array)):
+        value = array[step]
+        # we init index var to compare previous values to current value
+        idx = step - 1
+        # loop through
+        while idx >= 0 and value < array[idx]:
+            array[idx+1] = array[idx]
+            idx -= 1
+        array[idx+1] = value
+    return array
