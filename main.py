@@ -109,3 +109,35 @@ def quick_sort(array, low, high):
         #recursively call the right parition
         quick_sort(array, pivot_idx+1, high)
 
+def count_sort(array):
+    # find max element of the array
+    max_ele = max(array)
+
+    # initialise the count array
+    count_arr = [0] * (max_ele+1)
+
+    # loop through the input array and calculate the count
+    for i in range(len(array)):
+        count_arr[array[i]] += 1
+    print(count_arr)
+
+    # convert count array into a cumulative count
+    sum = 0
+    for j in range(0, max_ele+1):
+        sum += count_arr[j]
+        count_arr[j] = sum
+    print(count_arr)
+
+    # assign output
+    output = [None] * len(array)
+    for k in range(len(array)):
+        # take the value of the element from input and find the value for this in the count array
+        output_index = count_arr[array[k]] - 1
+
+        # reassign the new value to count_arr and create output var
+        output[output_index] = array[k]
+        count_arr[array[k]] -= 1
+
+    return output
+array =[4,2,2,8,3,3,1]
+print(count_sort(array))
