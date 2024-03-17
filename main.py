@@ -139,5 +139,43 @@ def count_sort(array):
         count_arr[array[k]] -= 1
 
     return output
-array =[4,2,2,8,3,3,1]
-print(count_sort(array))
+
+def count_sort_sig_fig(array, sigfig):
+    # count sort that sorts based on significant figures
+
+    size = len(array)
+    output = [0] * size
+
+    # since we are counting one column, we only need values 0 to 9
+    count = [0] * 10
+
+    # loop through input array and calculate count
+    for i in range(0, size):
+        # in order to get the correct column, we divide by the column (e.g. units, tenths)
+        # then take the result and modulo 10
+        index = ( array[i] // sigfig ) % 10
+        count[index] += 1
+
+    # calculate cumulative count
+    for i in range(1, 10):
+        count[i] += count[i-1]
+
+    # place elements in sorted order
+    i = size - 1
+    while i >= 0:
+        index = ( array[i] // sigfig ) % 10
+        output[count[index]-1] = array[i]
+        count[index] -=1
+        i-=1
+
+    for i in range(0, size):
+        array[i] = output[i]
+
+def radix_sort(array):
+    # find the max element and assign max no. of significant figures
+    highest = max(array)
+
+    sigfig = 1
+    while highest // sigfig > 0:
+        count_sort_sig_fig(array, sigfig)
+        sigfig *= 10
