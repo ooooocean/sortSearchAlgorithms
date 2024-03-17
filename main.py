@@ -1,3 +1,6 @@
+import sys
+
+
 def bubble_sort(array):
     # define the first step
     n = 0
@@ -206,3 +209,130 @@ def bucket_sort(array, no_of_buckets):
         for j in range(len(buckets[i])):
             output.append(buckets[i][j])
     return output
+
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+class Tree:
+    def __init__(self):
+        self.root = None
+
+    def print_helper(self, currPtr, indent, last):
+        if currPtr is not None:
+            sys.stdout.write(indent)
+            if last:
+                sys.stdout.write("R----")
+                indent += "     "
+            else:
+                sys.stdout.write("L----")
+                indent += "|    "
+            print(currPtr.value)
+            self.print_helper(currPtr.left, indent, False)
+            self.print_helper(currPtr.right, indent, True)
+
+    def max_heapify(self, root):
+
+        # add in checks for when there is less than 2 children
+        left_val = root.left.value if root.left else 0
+        right_val = root.right.value if root.right else 0
+
+        print(f'for {root.value}, left child is {left_val} and right child is {right_val}')
+
+        # in the terminal case, we make no changes
+        if root.value > left_val and root.value > right_val:
+            print(' no change, root is largest')
+            return
+        # if one of the children is larger, swap the values
+        if right_val > root.value and right_val > left_val:
+            (root.right.value, root.value) = (root.value, root.right.value)
+            print(f'right value is bigger, we now have root = {root.value}, left = {root.left.value}, right={root.right.value}')
+        if left_val > root.value and left_val > right_val:
+            (root.left.value, root.value) = (root.value,root.left.value)
+            print(f'left value is bigger, we now have root = {root.value}, left = {root.left.value}, right={root.right.value}')
+
+
+        # regardless of any swaps, we need to heapify each of the subtrees to make sure that
+        # heap property is maintained
+        self.max_heapify(root.left)
+        self.max_heapify(root.right)
+
+
+
+def array_to_tree_2(array, root, i):
+    # define terminal case
+    if i >= len(array):
+        return
+
+    print(f'function called for index {i}')
+
+    # assign value to root
+    if i == 0:
+        root = Node(array[i])
+
+    # assign a left child its index exists in the array
+    left_child_idx = (2*i) + 1
+
+    if left_child_idx <= len(array) - 1:
+        print(f'assigned element to index {left_child_idx}')
+        root.left = Node(array[left_child_idx])
+        array_to_tree_2(array, root.left, left_child_idx)
+
+    # repeat for right child
+    right_child_idx = (2*i) + 2
+    if right_child_idx <= len(array) - 1:
+        root.right = Node(array[right_child_idx])
+        array_to_tree_2(array, root.right,right_child_idx)
+
+    return root
+
+
+x = [1,12,9,5,6,10]
+# tree = Tree()
+# tree.root = array_to_tree_2(x, tree.root,0)
+# tree.print_helper(tree.root,'',False)
+# print('\n')
+# tree.max_heapify(tree.root)
+# tree.print_helper(tree.root,'',False)
+
+def heapify_array(array, n, i):
+    for j in range(i, -1, -1):
+        # set current value to be the largest
+        largest = i
+
+        # define left and right children
+        left = (2 * i) + 1
+        right = (2 * i) + 2
+
+        if left < n and array[left] > array[largest]:
+            largest = left
+        if right < n and array[right] > array[largest]:
+            largest = right
+        if largest != i:
+            array[i], array[largest] = array[largest], array[i]
+            heapify_array(array, n, largest)
+        i-=1
+
+print(x)
+heapify_array(x, 6, 2)
+print(x)
+print('\n')
+
+def heap_sort(array, n):
+    print(f'input is {array}')
+    for i in range(n-1):
+        # remove root element and add to end of array
+        array[0], array[n-1-i] = array[n-1-i], array[0]
+        print(f'array elements swapped for i={i}\narray is now {array}')
+
+        # heapify with reduced heap
+        new_idx = (n // 2) - 1
+        heapify_array(array, n-1-i, new_idx)
+        print(f'array heapified to {array}\n')
+    return array
+
+heap_sort(x, 6)
+print(x)
