@@ -75,3 +75,37 @@ def insertion_sort(array):
             idx -= 1
         array[idx+1] = value
     return array
+
+def partition(array, low, high):
+    # function to swap the first instance of an element larger than pivot
+    # with the first instance of an element smaller than pivot
+
+    pivot = array[high]     # rightmost element as pivot
+    i = low - 1             # pointer for greater element, -1 for initial call
+
+    # traverse through all elements
+    for j in range(low, high):
+        # if the element at index is smaller than pivot, swap elements
+        if array[j] <= pivot:
+            i += 1          #
+            (array[i], array[j]) = (array[j], array[i])
+
+    # once all elements traverse, swap pivot element with greater element pointer
+    (array[i+1], array[high]) = (array[high], array[i+1])
+
+    # return position where partition is done
+    return i+1
+
+def quick_sort(array, low, high):
+    # we terminate recursion once array is of size 1, i.e. index of low and high are same
+    if low < high:
+
+        #find the pivot element
+        pivot_idx = partition(array, low, high)
+
+        # recursively call the left partition
+        quick_sort(array, low, pivot_idx-1)
+
+        #recursively call the right parition
+        quick_sort(array, pivot_idx+1, high)
+
