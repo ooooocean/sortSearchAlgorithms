@@ -234,24 +234,33 @@ class Tree:
             self.print_helper(currPtr.left, indent, False)
             self.print_helper(currPtr.right, indent, True)
 
-def array_to_tree(array):
-    for i in range(len(array)):
-        temp = Node(array[i])
+    def max_heapify(self, root):
 
-        if i == 0:
-            tree = Tree()
-            tree.root = temp
+        # add in checks for when there is less than 2 children
+        left_val = root.left.value if root.left else 0
+        right_val = root.right.value if root.right else 0
 
-        left_ele_index = (2 * i) + 1
-        right_ele_index = (2 * i) + 2
+        print(f'for {root.value}, left child is {left_val} and right child is {right_val}')
 
-        if left_ele_index <= len(array)-1:
-            temp.left = Node(array[left_ele_index])
-        if right_ele_index <= len(array)-1:
-            temp.right = Node(array[right_ele_index])
-    return tree
-# x=array_to_tree([1,12,9,5,6,10])
-# x.print_helper(x.root,'',False)
+        # in the terminal case, we make no changes
+        if root.value > left_val and root.value > right_val:
+            print(' no change, root is largest')
+            return
+        # if one of the children is larger, swap the values
+        if right_val > root.value and right_val > left_val:
+            (root.right.value, root.value) = (root.value, root.right.value)
+            print(f'right value is bigger, we now have root = {root.value}, left = {root.left.value}, right={root.right.value}')
+        if left_val > root.value and left_val > right_val:
+            (root.left.value, root.value) = (root.value,root.left.value)
+            print(f'left value is bigger, we now have root = {root.value}, left = {root.left.value}, right={root.right.value}')
+
+
+        # regardless of any swaps, we need to heapify each of the subtrees to make sure that
+        # heap property is maintained
+        self.max_heapify(root.left)
+        self.max_heapify(root.right)
+
+
 
 def array_to_tree_2(array, root, i):
     # define terminal case
@@ -279,3 +288,40 @@ def array_to_tree_2(array, root, i):
         array_to_tree_2(array, root.right,right_child_idx)
 
     return root
+
+
+x = [1,12,9,5,6,10]
+# tree = Tree()
+# tree.root = array_to_tree_2(x, tree.root,0)
+# tree.print_helper(tree.root,'',False)
+# print('\n')
+# tree.max_heapify(tree.root)
+# tree.print_helper(tree.root,'',False)
+
+def heapify_array(array, n, i):
+    for j in range(i, -1, -1):
+        print(f'\ninitiating for step {i}\n')
+        # set current value to be the largest
+        largest = i
+
+        # define left and right children
+        left = (2 * i) + 1
+        right = (2 * i) + 2
+
+        print(f'left index of {i} is {left}, right index is {right}. checking against {n-1}')
+        print(f'largest index is {largest} with value {array[largest]}')
+        if left < n and array[left] > array[largest]:
+            largest = left
+            print(f'new largest index is {largest} with value {array[largest]}')
+        if right < n and array[right] > array[largest]:
+            largest = right
+            print(f'new largest index is {largest} with value {array[largest]}')
+        if largest != i:
+            print(f'swapped values, heapifying again')
+            array[i], array[largest] = array[largest], array[i]
+            heapify_array(array, n, largest)
+        i-=1
+
+print(x)
+y = heapify_array(x, 6, 2)
+print(x)
