@@ -316,11 +316,6 @@ def heapify_array(array, n, i):
             heapify_array(array, n, largest)
         i-=1
 
-print(x)
-heapify_array(x, 6, 2)
-print(x)
-print('\n')
-
 def heap_sort(array, n):
     print(f'input is {array}')
     for i in range(n-1):
@@ -334,5 +329,26 @@ def heap_sort(array, n):
         print(f'array heapified to {array}\n')
     return array
 
-heap_sort(x, 6)
-print(x)
+def shell_sort(array, n):
+    # define the interval - in this case, we are using the default
+    interval = n // 2
+
+    # we iterate until the interval is equal to 1
+    while interval > 0:
+        # on the inner loop, explicitly set n so that we don't include it
+        for i in range(interval, n):
+            # assign the further element to a var
+            temp = array[i]
+            j = i
+
+            # we swap if the index is larger than the interval and the value is greater than the earlier element
+            while j >= interval and array[j - interval] > temp:
+                array[j] = array[j-interval]
+                j -= interval
+            array[j] = temp
+        interval //= 2
+
+
+array = [9,8,3,7,5,6,4,1]
+shell_sort(array, len(array))
+print(array)
