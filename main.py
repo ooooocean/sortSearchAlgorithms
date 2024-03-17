@@ -1,3 +1,6 @@
+import sys
+
+
 def bubble_sort(array):
     # define the first step
     n = 0
@@ -206,3 +209,73 @@ def bucket_sort(array, no_of_buckets):
         for j in range(len(buckets[i])):
             output.append(buckets[i][j])
     return output
+
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+class Tree:
+    def __init__(self):
+        self.root = None
+
+    def print_helper(self, currPtr, indent, last):
+        if currPtr is not None:
+            sys.stdout.write(indent)
+            if last:
+                sys.stdout.write("R----")
+                indent += "     "
+            else:
+                sys.stdout.write("L----")
+                indent += "|    "
+            print(currPtr.value)
+            self.print_helper(currPtr.left, indent, False)
+            self.print_helper(currPtr.right, indent, True)
+
+def array_to_tree(array):
+    for i in range(len(array)):
+        temp = Node(array[i])
+
+        if i == 0:
+            tree = Tree()
+            tree.root = temp
+
+        left_ele_index = (2 * i) + 1
+        right_ele_index = (2 * i) + 2
+
+        if left_ele_index <= len(array)-1:
+            temp.left = Node(array[left_ele_index])
+        if right_ele_index <= len(array)-1:
+            temp.right = Node(array[right_ele_index])
+    return tree
+# x=array_to_tree([1,12,9,5,6,10])
+# x.print_helper(x.root,'',False)
+
+def array_to_tree_2(array, root, i):
+    # define terminal case
+    if i >= len(array):
+        return
+
+    print(f'function called for index {i}')
+
+    # assign value to root
+    if i == 0:
+        root = Node(array[i])
+
+    # assign a left child its index exists in the array
+    left_child_idx = (2*i) + 1
+
+    if left_child_idx <= len(array) - 1:
+        print(f'assigned element to index {left_child_idx}')
+        root.left = Node(array[left_child_idx])
+        array_to_tree_2(array, root.left, left_child_idx)
+
+    # repeat for right child
+    right_child_idx = (2*i) + 2
+    if right_child_idx <= len(array) - 1:
+        root.right = Node(array[right_child_idx])
+        array_to_tree_2(array, root.right,right_child_idx)
+
+    return root
