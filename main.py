@@ -179,3 +179,30 @@ def radix_sort(array):
     while highest // sigfig > 0:
         count_sort_sig_fig(array, sigfig)
         sigfig *= 10
+
+def bucket_sort(array, no_of_buckets):
+    # create bucket array
+    buckets = []
+    for i in range(no_of_buckets):
+        buckets.append([])
+
+    # determine bucket interval by
+    interval = (max(array) - min(array)) / no_of_buckets
+    # iterate through the array and add to bucket
+    for i in range(len(array)-1):
+        if array[i] == max(array):
+            buckets[no_of_buckets-1].append(array[i])
+        else:
+            # find which interval the value lies in
+            temp = (array[i] - min(array)) / interval
+            position = int(temp)
+            buckets[position].append(array[i])
+
+    # now sort for each bucket
+    for i in range(no_of_buckets):
+        buckets[i].sort()
+    output = []
+    for i in range(no_of_buckets):
+        for j in range(len(buckets[i])):
+            output.append(buckets[i][j])
+    return output
